@@ -45,11 +45,11 @@ public class LettresAleatoires {
     public static boolean peutFormerMot(String lettres, String mot) {
         int[] compteLettres = new int[26]; // Un tableau pour compter les occurrences de chaque lettre dans les lettres tirées
         for (char c : lettres.toCharArray()) {
-            if (c >= 'A' && c <= 'Z') {  // Check if uppercase
+            if (c >= 'A' && c <= 'Z') {  // Vérifie si la lettre est une majuscule
                 compteLettres[c - 'A']++;
-            } else if (c >= 'a' && c <= 'z') {  // Optionally, check if lowercase
+            } else if (c >= 'a' && c <= 'z') {  // vérifie si la lettre est une minuscule
                 compteLettres[c - 'a']++;
-            } // Otherwise, skip the character or handle it differently
+            } // sinon ignore la lettre
         }
 
         // Vérifie si chaque lettre du mot peut être formée avec les lettres tirées
@@ -63,7 +63,7 @@ public class LettresAleatoires {
                     return false;
                 }
             } else {
-                // Handle special characters, numbers, etc.
+                // caractères spéciaux
                 return false;
             }
         }
