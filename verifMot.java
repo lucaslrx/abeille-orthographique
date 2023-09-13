@@ -36,7 +36,6 @@ public class verifMot {
             for (char c : saisieUtilisateur.toCharArray()) {
                 if (!lettresDisponibles.contains(String.valueOf(c))) {
                     System.out.println("Le mot contient des lettres non disponibles. Veuillez utiliser uniquement les lettres tirées.");
-                    continue; // retourne au début de la boucle
                 }
             }
 
@@ -52,7 +51,7 @@ public class verifMot {
                 continue; // retourne au début de la boucle
             }
 
-            int pointsGagnes = 0; // Variable pour stocker les points gagnés lors de ce tour
+            int pointsGagnes; // Variable pour stocker les points gagnés lors de ce tour
             if (dictionnaire.contains(saisieUtilisateur)) {
                 motsJoues.add(saisieUtilisateur);  // Ajouter le mot à la liste des mots déjà joués
                 System.out.println("Le mot " + saisieUtilisateur + " existe dans le dictionnaire.");
