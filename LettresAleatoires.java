@@ -42,15 +42,33 @@ public class LettresAleatoires {
     }
 
 
-    private static boolean peutFormerMot(String lettres, String mot) {
-        StringBuilder lettresTemporaires = new StringBuilder(lettres);
+    public static boolean peutFormerMot(String lettres, String mot) {
+        int[] compteLettres = new int[26]; // Un tableau pour compter les occurrences de chaque lettre dans les lettres tirées
+        for (char c : lettres.toCharArray()) {
+            if (c >= 'A' && c <= 'Z') {  // Check if uppercase
+                compteLettres[c - 'A']++;
+            } else if (c >= 'a' && c <= 'z') {  // Optionally, check if lowercase
+                compteLettres[c - 'a']++;
+            } // Otherwise, skip the character or handle it differently
+        }
+
+        // Vérifie si chaque lettre du mot peut être formée avec les lettres tirées
         for (char c : mot.toCharArray()) {
-            int index = lettresTemporaires.indexOf(String.valueOf(c));
-            if (index == -1) {
+            if (c >= 'A' && c <= 'Z') {
+                if (--compteLettres[c - 'A'] < 0) {
+                    return false;
+                }
+            } else if (c >= 'a' && c <= 'z') {
+                if (--compteLettres[c - 'a'] < 0) {
+                    return false;
+                }
+            } else {
+                // Handle special characters, numbers, etc.
                 return false;
             }
-            lettresTemporaires.deleteCharAt(index);
         }
+
         return true;
     }
+
 }

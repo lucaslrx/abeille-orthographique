@@ -6,11 +6,10 @@ import java.util.Scanner;
 
 public class verifMot {
 
-    public static void verifierMot(String lettresDisponibles, char lettreCentrale, HashSet<String> dictionnaire) {
-        Scanner scanner = new Scanner(System.in);
+    public static void verifierMot(String lettresDisponibles, char lettreCentrale, HashSet<String> dictionnaire, HashSet<String> motsPossibles) {        Scanner scanner = new Scanner(System.in);
         int score = 0;
         HashSet<String> motsJoues = new HashSet<>();  // Pour stocker les mots déjà joués
-
+        int motsTrouves = 0;
         while (true) { // boucle infinie jusqu'à ce que l'utilisateur décide de quitter
             System.out.println("Lettres disponibles: " + lettresDisponibles);
             System.out.println("Veuillez saisir un mot de 4 lettres ou plus ou tapez 'QUITTER' pour sortir:");
@@ -53,23 +52,48 @@ public class verifMot {
                 continue; // retourne au début de la boucle
             }
 
+            int pointsGagnes = 0; // Variable pour stocker les points gagnés lors de ce tour
             if (dictionnaire.contains(saisieUtilisateur)) {
                 motsJoues.add(saisieUtilisateur);  // Ajouter le mot à la liste des mots déjà joués
                 System.out.println("Le mot " + saisieUtilisateur + " existe dans le dictionnaire.");
                 if (longueur == 4) {
-                    score += 1;  // 4 lettres valent 1 point
+                    pointsGagnes = 1;
                 } else {
-                    score += longueur;  // Pour les mots de 5 lettres ou plus, chaque lettre vaut un point.
+                    pointsGagnes = longueur;  // Pour les mots de 5 lettres ou plus, chaque lettre vaut un point.
                 }
 
                 if (saisieUtilisateur.contains(lettresDisponibles)) { // Vérifier si c'est un pangramme
-                    score += 7;  // Bonus de 7 points pour un pangramme
+                    pointsGagnes += 7;  // Bonus de 7 points pour un pangramme
+                    System.out.println("Pangramme !");
                 }
 
+                score += pointsGagnes;
+                System.out.println("+" + pointsGagnes + " points !");
                 System.out.println("Votre score actuel est : " + score);
             } else {
                 System.out.println("Le mot " + saisieUtilisateur + " n'existe pas dans le dictionnaire.");
             }
+
+            if (motsPossibles.contains(saisieUtilisateur)) {
+                motsTrouves++;
+                double pourcentage = ((double) motsTrouves / motsPossibles.size()) * 100;
+                String rang = determinerRang(pourcentage);
+                System.out.println("Votre rang est : " + rang);
+            }
+
+            double pourcentage = ((double) motsTrouves / motsPossibles.size()) * 100;
+            int barLength = 50; // Longueur de la barre de progression
+            int completed = (int) (pourcentage / 100 * barLength);
+            StringBuilder bar = new StringBuilder();
+            for (int i = 0; i < barLength; i++) {
+                if (i < completed) {
+                    bar.append('=');
+                } else {
+                    bar.append('-');
+                }
+            }
+            System.out.println("Progression: [" + bar + "] ");
+
         }
         }
 
@@ -88,5 +112,26 @@ public class verifMot {
         return hashSetMot;
     }
 
+    public static String determinerRang(double pourcentage) {
+        if (pourcentage >= 70) return "Génie";
+        if (pourcentage >= 50) return "Incroyable !";
+        if (pourcentage >= 40) return "Génial !";
+        if (pourcentage >= 25) return "Joli !";
+        if (pourcentage >= 15) return "Solide";
+        if (pourcentage >= 8) return "Pas mal";
+        if (pourcentage >= 5) return "Ça monte !";
+        if (pourcentage >= 2) return "Début encourageant";
+        return "Débutant";
+    }
+
+    public static HashSet<String> motsPossibles(String lettres, char lettreCentrale, HashSet<String> dictionnaire) {
+        HashSet<String> possibles = new HashSet<>();
+        for (String mot : dictionnaire) {
+            if (mot.length() >= 4 && mot.contains(String.valueOf(lettreCentrale)) && LettresAleatoires.peutFormerMot(lettres, mot)) {
+                possibles.add(mot);
+            }
+        }
+        return possibles;
+    }
 
 }
